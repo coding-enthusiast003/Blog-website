@@ -57,11 +57,8 @@ def contact():
         # save the contact to mongoDB
         mongo.db.contacts.insert_one({'name': name,
             'email': email,
-            'phone': phone_e164,
-            'country_code': f"+{country_code}",
-            'message': message,
-            'date': datetime.utcnow()
-        })
+            'phone': phone,
+            'message': message})
 
         # Send confirmation to user
         try:
