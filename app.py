@@ -25,10 +25,9 @@ def home():
     """
     Renders the homepage with all posts.
     """
-    posts_cursor = mongo.db.posts.find().sort('date', -1)
+    posts_cursor = mongo.db.posts.find().sort('date', -1).limit(3) # sorting the posts by date in descending order
     posts = list(posts_cursor)
-    sample_post_id = str(posts[0]['_id']) if posts else None
-    return render_template('index.html', posts=posts, sample_post_id=sample_post_id)
+    return render_template('index.html', posts=posts)
 
 @app.route('/about')
 def about():
@@ -53,11 +52,21 @@ def show_latest_post():
     Redirects /post/ to the latest blog post's URL.
     """
     post = mongo.db.posts.find().sort('date', -1).limit(1)
-    post = next(post, None)
+    post = next(post, None)   # next function is used to get the first item from the cursor
     if post:
-        return redirect(url_for('show_post', post_id=str(post['_id'])))
+        return redirect(url_for('show_post', post_id=str(post['_id'])))  # calling the show_post function with the latest post ID
     return "No post found.", 404
 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """
+    Renders the login page.
+    """
+    if request.method == 'POST':
+        # Handle login logic here
+        pass
+    return render_template('login.html')
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
