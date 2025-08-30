@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block header %}{% endblock %}   <!-- This removes the navbar/header -->
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4">
+    <h2 class="mb-3">Welcome, {{ session['user'] }} 👋</h2>
+    <p class="text-muted">This is your personal dashboard.</p>
+
+    <hr>
+
+    <div class="row">
+      <!-- Profile Section -->
+      <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h4 class="card-title">Your Profile</h4>
+            <p><strong>Username:</strong> {{ session['user'] }}</p>
+            <p><strong>Email:</strong> {{ user_email if user_email else "Not Available" }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links Section -->
+      <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h4 class="card-title">Quick Actions</h4>
+            <ul>
+              <li><a href="{{ url_for('about') }}">About Page</a></li>
+              <li><a href="{{ url_for('contact') }}">Contact</a></li>
+              <li><a href="{{ url_for('home') }}">Home</a></li>
+              <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h4 class="card-title">Your Activity</h4>
+            <p>Here you can show recent actions, posts, or MongoDB analytics.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}

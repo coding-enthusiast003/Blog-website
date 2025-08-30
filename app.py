@@ -1,4 +1,4 @@
-from flask import Flask,request, render_template, redirect, url_for
+from flask import Flask,request, render_template, redirect, url_for,session,flash
 from flask_mail import Mail, Message
 from flask_pymongo import PyMongo
 import  os
@@ -8,6 +8,8 @@ from bson.objectid import ObjectId
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY')
+
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Use your email provider's SMTP server
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -58,14 +60,54 @@ def show_latest_post():
     return "No post found.", 404
 
 
+
+@app.route('/dashboard')
+def dashboard():
+    """
+    Renders the dashboard page.
+    """
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    user_email = session.get("email")
+    return render_template('dashboard.html', username=session['user'], user_email=user_email)
+
+
+@app.route('/logout')
+def logout():
+    """
+    Logs the user out and clears the session.
+    """
+    session.clear()   # removes all session data
+    flash("You have been logged out.", "info")
+    return redirect(url_for('login'))
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """
     Renders the login page.
+
     """
+    if 'user' in session :
+        return redirect(url_for('dashboard'))
+
     if request.method == 'POST':
-        # Handle login logic here
-        pass
+        username = request.form['username'].strip()
+        email = request.form['email'].strip()
+        password = request.form['password'].strip()
+        
+        #check
+        user_find = mongo.db.users.find_one({'username': username, 'email': email, 'password': password})
+
+        if user_find:
+            session["user"] = user_find["username"]
+            session["email"] = user_find["email"]
+            flash("Login successful!", "success")
+            return redirect(url_for("dashboard"))
+        else:
+            flash("Login failed. Please check your credentials.", "danger")
+    
     return render_template('login.html')
 
 @app.route('/contact', methods=['GET', 'POST'])

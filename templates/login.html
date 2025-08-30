@@ -157,10 +157,10 @@
       <div class="login">
         <h1 style="text-align: center;">Login</h1>
         <div class="form">
-          <form method="post" action="/login">
+          <form method="post" action="{{ url_for('login') }}">
             <div class="one">
-              <label for="name">Name : </label>
-              <input type="text" id="name" name="name"   required>
+              <label for="username">Name : </label>
+              <input type="text" id="username" name="username"   required>
             </div>
             <div class="one">
               <label for="email">Email : </label>
