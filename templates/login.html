@@ -2,12 +2,23 @@
 
 {% block styles %}
   <style>
+    /* Remove background from body */
     body {
       margin: 0;
+      font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      height: 100vh;
+      background: none;
+    }
+    /* Add background to wrapper */
+    .bg-wrapper {
+      min-height: 80vh;
       background-image: url('{{ url_for("static", filename="assets/login.jpg") }}');
       background-size: cover;
       background-position: center;
       backdrop-filter: blur(4px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .login {
@@ -22,8 +33,9 @@
       align-items: center;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
       padding: 20px;
-      backdrop-filter: blur(20px);
-      color: rgb(255, 255, 255);
+      backdrop-filter: blur(2.8px);
+      color: rgb(168, 161, 161);
+      background: rgba(0,0,0,0.4);
     }
 
     .one, .two {
@@ -48,7 +60,8 @@
       height: 30px;
       padding: 4px 8px;
       border-radius: 6px;
-      border: 1px solid #ccc;
+      border: 1px solid #8c8080;
+      background: #c0baba;
     }
 
     .form-check {
@@ -139,32 +152,34 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container" style="height: fit-content; display:flex; justify-content:center; align-items:center; min-height: 80vh;">
-    <div class="login">
-      <h1 style="text-align: center;">Login</h1>
-      <div class="form">
-        <form method="post" action="/login">
-          <div class="one">
-            <label for="name">Name : </label>
-            <input type="text" id="name" name="name" placeholder="Please enter your name" required>
-          </div>
-          <div class="one">
-            <label for="email">Email : </label>
-            <input type="email" id="email" name="email" placeholder="Please enter your email" required>
-          </div>
-          <div class="two">
-            <label for="password">Password : </label>
-            <input type="password" id="password" name="password" placeholder="Please enter your password" required>
-          </div>
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="remember" name="remember">
-            <label class="form-check-label" for="remember">Remember me</label>
-          </div>
-          <button type="submit">Login</button>
-          <div class="sign-up" style="width: 100%; text-align: center; margin-top: 32px; font-weight: 600; color: #ccc;">
-            <small>Don't have an account? <a href="/register">Register</a></small>
-          </div>
-        </form>
+  <div class="bg-wrapper">
+    <div class="container" style="height: fit-content; display:flex; justify-content:center; align-items:center;">
+      <div class="login">
+        <h1 style="text-align: center;">Login</h1>
+        <div class="form">
+          <form method="post" action="/login">
+            <div class="one">
+              <label for="name">Name : </label>
+              <input type="text" id="name" name="name"   required>
+            </div>
+            <div class="one">
+              <label for="email">Email : </label>
+              <input type="email" id="email" name="email"  required>
+            </div>
+            <div class="two">
+              <label for="password">Password : </label>
+              <input type="password" id="password" name="password"  required>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="remember" name="remember">
+              <label class="form-check-label" for="remember">Remember me</label>
+            </div>
+            <button type="submit">Login</button>
+            <div class="sign-up" style="width: 100%; text-align: center; margin-top: 32px; font-weight: 600; color: #ccc;">
+              <small  >Don't have an account? <a style="color: #007bff;" href="/register">Register</a></small>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
