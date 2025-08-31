@@ -4,6 +4,7 @@ from flask_pymongo import PyMongo
 import  os
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
+ 
 
 load_dotenv()
 
@@ -64,13 +65,45 @@ def show_latest_post():
 @app.route('/dashboard')
 def dashboard():
     """
-    Renders the dashboard page.
+    Renders the dashboard page. b
     """
     if 'user' not in session:
         return redirect(url_for('login'))
 
     user_email = session.get("email")
-    return render_template('dashboard.html', username=session['user'], user_email=user_email)
+    posts = mongo.db.posts.find({'email': user_email}).sort('date', -1)
+    return render_template('dashboard.html', username=session['user'], user_email=user_email, posts=posts)
+
+
+@app.route('/edit/<post_id>', methods=['GET', 'POST'])
+def edit_post(post_id):
+    """
+    Edits an existing post.
+    """
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    post = mongo.db.posts.find_one({'_id': ObjectId(post_id)})
+
+    if request.method == 'POST':
+        title = request.form['title'].strip()
+        content = request.form['content'].strip()
+
+        mongo.db.posts.update_one({'_id': ObjectId(post_id)}, {'$set': {'title': title, 'content': content}})
+        flash("Post updated successfully!", "success")
+        return redirect(url_for('dashboard'))
+
+    return render_template('edit.html', post=post)
+
+
+@app.route("/delete/<post_id>")
+def delete_post(post_id):
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    mongo.db.posts.delete_one({"_id": ObjectId(post_id)})
+    flash("Post deleted successfully!", "success")
+    return redirect(url_for("dashboard"))
 
 
 @app.route('/logout')
