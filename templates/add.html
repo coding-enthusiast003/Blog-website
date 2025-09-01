@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block content %}
+<!-- Page Header-->
+<header class="masthead" style="background-image: url('/static/assets/add.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="page-heading">
+                    <h1>Add Blog</h1>
+                    <span class="subheading">Share your thoughts with the world.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Main Content-->
+<main class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <p>Fill out the form below to add a new blog post.</p>
+                <div class="my-5">
+                    <form id="addBlogForm" method="POST" action="{{ url_for('add_blog') }}">
+                        <!-- Title -->
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="title" name="title" type="text"
+                                placeholder="Enter blog title..." required maxlength="100" />
+                            <label for="title">Title</label>
+                            <div class="invalid-feedback">Please enter a blog title (max 100 characters).</div>
+                        </div>
+
+                        <!-- Subtitle -->
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="subtitle" name="subtitle" type="text"
+                                placeholder="Enter blog subtitle..." maxlength="150" />
+                            <label for="subtitle">Subtitle</label>
+                            <div class="invalid-feedback">Subtitle is optional (max 150 characters).</div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="content" name="content"
+                                placeholder="Enter your blog content here..." style="height: 16rem" required minlength="20"
+                                title="Content must be at least 20 characters long."></textarea>
+                            <label for="content">Content</label>
+                            <div class="invalid-feedback">Content should be at least 20 characters.</div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button class="btn btn-primary text-uppercase" id="submitButton" type="submit">
+                            Publish
+                        </button>
+                    </form>
+
+                    {% if message %}
+                    <div class="alert alert-info mt-4">{{ message }}</div>
+                    {% endif %}
+
+                    {% if error %}
+                    <div class="alert alert-danger mt-4">{{ error }}</div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

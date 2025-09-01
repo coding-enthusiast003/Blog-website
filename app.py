@@ -4,6 +4,7 @@ from flask_pymongo import PyMongo
 import  os
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
+from datetime import datetime
  
 
 load_dotenv()
@@ -73,6 +74,27 @@ def dashboard():
     user_email = session.get("email")
     posts = mongo.db.posts.find({'email': user_email}).sort('date', -1)
     return render_template('dashboard.html', username=session['user'], user_email=user_email, posts=posts)
+
+
+@app.route('/add', methods=['GET', 'POST'])
+def add_blog():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        title = request.form['title'].strip()
+        subtitle = request.form['subtitle'].strip()
+        content = request.form['content'].strip()
+        author = session.get("user")
+        date = datetime.now().strftime("%B %d, %Y")
+        email = session.get("email")
+        
+        # Insert the new post into the database
+        mongo.db.posts.insert_one({'title': title, 'subtitle': subtitle, 'content': content, 'email': email, 'author': author, 'date': date})
+        flash("Post added successfully!", "success")
+        return redirect(url_for('dashboard'))
+
+    return render_template('add.html')
 
 
 @app.route('/edit/<post_id>', methods=['GET', 'POST'])
