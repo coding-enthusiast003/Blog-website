@@ -5,8 +5,10 @@ import  os
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
 from datetime import datetime
-from werkzeug.utils import secure_filename
- 
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+
+ph = PasswordHasher()
 
 load_dotenv()
 
@@ -167,28 +169,61 @@ def logout():
 def login():
     """
     Renders the login page.
-
     """
-    if 'user' in session :
+    if 'user' in session:
         return redirect(url_for('dashboard'))
 
     if request.method == 'POST':
         username = request.form['username'].strip()
         email = request.form['email'].strip()
         password = request.form['password'].strip()
-        
-        #check
-        user_find = mongo.db.users.find_one({'username': username, 'email': email, 'password': password})
 
-        if user_find:
-            session["user"] = user_find["username"]
-            session["email"] = user_find["email"]
-            flash("Login successful!", "success")
-            return redirect(url_for("dashboard"))
-        else:
-            flash("Login failed. Please check your credentials.", "danger")
-    
+        # Step 1: Find user by username + email only
+        user_find = mongo.db.users.find_one({'username': username, 'email': email})
+
+        if not user_find:
+            flash("User not found.", "danger")
+            return render_template('login.html')
+
+        # Step 2: Verify password with Argon2
+        try:
+            ph.verify(user_find['password'], password)
+        except VerifyMismatchError:
+            flash("Login failed. Invalid password.", "danger")
+            return render_template('login.html')
+
+        # Step 3: If success, start session
+        session["user"] = user_find["username"]
+        session["email"] = user_find["email"]
+        flash("Login successful!", "success")
+        return redirect(url_for("dashboard"))
+
     return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if 'user' in session:
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        username = request.form['username'].strip()
+        email = request.form['email'].strip()
+        password = request.form['password'].strip()
+
+        # Hash the password
+        hashed_password = ph.hash(password)
+
+        # Save the user to the database
+        mongo.db.users.insert_one({
+            'username': username,
+            'email': email,
+            'password': hashed_password
+        })
+
+        flash("Registration successful! You can now log in.", "success")
+        return redirect(url_for('login'))
+
+    return render_template('register.html')
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
