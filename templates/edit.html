@@ -1,18 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Edit Post{% endblock %}
+
+{% block content %}
 <div class="container mt-5">
   <h2>Edit Post</h2>
-  <form method="POST" enctype="multipart/form-data"> <!-- Important for file upload -->
+  <form method="POST">
     <div class="mb-3">
       <label class="form-label">Title</label>
       <input type="text" class="form-control" name="title" value="{{ post.title }}" required>
     </div>
-
+    <div class="mb-3">
+      <label class="form-label">Sub-Title</label>
+      <input type="text" class="form-control" name="subtitle" value="{{ post.subtitle }}" required>
+    </div>
     <div class="mb-3">
       <label class="form-label">Content</label>
       <textarea class="form-control" name="content" rows="5" required>{{ post.content }}</textarea>
     </div>
-
-
     <button type="submit" class="btn btn-primary">Update</button>
     <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
+{% endblock %}

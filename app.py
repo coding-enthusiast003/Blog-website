@@ -5,6 +5,7 @@ import  os
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
 from datetime import datetime
+from werkzeug.utils import secure_filename
  
 
 load_dotenv()
@@ -29,9 +30,21 @@ def home():
     """
     Renders the homepage with all posts.
     """
-    posts_cursor = mongo.db.posts.find().sort('date', -1).limit(3) # sorting the posts by date in descending order
+    page = int(request.args.get('page', 1))
+    posts_per_page = 3
+
+    # Count total posts in MongoDB
+    total_posts = mongo.db.posts.count_documents({})
+
+    # Calculate how many posts to skip
+    skip = (page - 1) * posts_per_page
+
+    posts_cursor = mongo.db.posts.find().sort('date', -1).skip(skip).limit(posts_per_page)
     posts = list(posts_cursor)
-    return render_template('index.html', posts=posts)
+
+    # Total number of pages
+    total_pages = (total_posts + posts_per_page - 1) // posts_per_page
+    return render_template('index.html', posts=posts, total_pages=total_pages, current_page=page)
 
 @app.route('/about')
 def about():
@@ -85,12 +98,24 @@ def add_blog():
         title = request.form['title'].strip()
         subtitle = request.form['subtitle'].strip()
         content = request.form['content'].strip()
+        img_file = request.files.get('file1')
         author = session.get("user")
         date = datetime.now().strftime("%B %d, %Y")
         email = session.get("email")
+
         
-        # Insert the new post into the database
-        mongo.db.posts.insert_one({'title': title, 'subtitle': subtitle, 'content': content, 'email': email, 'author': author, 'date': date})
+         
+        post_data = {
+            'title': title,
+            'subtitle': subtitle,
+            'content': content,
+            'email': email,
+            'author': author,
+            'date': date
+        }
+         
+
+        mongo.db.posts.insert_one(post_data)
         flash("Post added successfully!", "success")
         return redirect(url_for('dashboard'))
 
