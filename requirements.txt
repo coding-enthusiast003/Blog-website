@@ -3,4 +3,5 @@ requests
 flask-pymongo
 Flask-Mail
 python-dotenv
+argon2-cffi
 gunicorn
