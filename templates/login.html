@@ -1,221 +1,196 @@
 {% extends "layout.html" %}
 
 {% block styles %}
-  <style>
-    /* Remove background from body */
-    body {
-      margin: 0;
-      font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      height: 100vh;
-      background: none;
-    }
-    /* Add background to wrapper */
-    .bg-wrapper {
-      min-height: 80vh;
-      background-image: url('{{ url_for("static", filename="assets/login.jpg") }}');
-      background-size: cover;
-      background-position: center;
-      backdrop-filter: blur(4px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+<style>
+  /* Remove background from body */
+  body {
+    margin: 0;
+    font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    height: 100vh;
+    background: none;
+  }
 
+  /* Add background to wrapper */
+  .bg-wrapper {
+    min-height: 80vh;
+    background-image: url('{{ url_for("static", filename="assets/login.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login {
+    height: 480px;
+    width: 630px;
+    border: 1px solid black;
+    border-radius: 20px;
+    font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    backdrop-filter: blur(2.8px);
+    color: rgb(168, 161, 161);
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .one,
+  .two {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .one label,
+  .two label {
+    margin-right: 16px;
+    font-size: 18px;
+    font-weight: bolder;
+    min-width: 100px;
+  }
+
+  .form input[type="text"],
+  .form input[type="password"],
+  .form input[type="email"] {
+    width: 260px;
+    height: 30px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #8c8080;
+    background: #c0baba;
+  }
+
+  .form-check {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    margin-bottom: 24px;
+    width: 100%;
+  }
+
+  .form-check-input {
+    margin-right: 8px;
+  }
+
+  button {
+    width: 120px;
+    height: 36px;
+    border-radius: 8px;
+    font-size: 16px;
+    margin: 0 auto;
+    display: block;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  /* Tablet */
+  @media (max-width: 768px) {
     .login {
-      height: 480px;
-      width: 630px;
-      border: 1px solid black;
-      border-radius: 20px;
-      font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-      padding: 20px;
-      backdrop-filter: blur(2.8px);
-      color: rgb(168, 161, 161);
-      background: rgba(0,0,0,0.4);
-    }
-
-    .one, .two {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-      width: 100%;
-      justify-content: space-between;
-    }
-
-    .one label, .two label {
-      margin-right: 16px;
-      font-size: 18px;
-      font-weight: bolder;
-      min-width: 100px;
+      width: 90%;
+      height: auto;
     }
 
     .form input[type="text"],
     .form input[type="password"],
     .form input[type="email"] {
-      width: 260px;
-      height: 30px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      border: 1px solid #8c8080;
-      background: #c0baba;
+      width: 220px;
+    }
+  }
+
+  /* Redmi & small mobiles (393px and below) */
+  @media (max-width: 393px) {
+    .login {
+      width: 95%;
+      height: auto;
+      padding: 16px;
     }
 
-    .form-check {
-      display: flex;
-      align-items: center;
-      margin-top: 16px;
-      margin-bottom: 24px;
+    .one,
+    .two {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .one label,
+    .two label {
+      margin-bottom: 6px;
+      min-width: auto;
+      font-size: 16px;
+    }
+
+    .form input[type="text"],
+    .form input[type="password"],
+    .form input[type="email"] {
       width: 100%;
     }
 
-    .form-check-input {
-      margin-right: 8px;
-    }
-
     button {
-      width: 120px;
-      height: 36px;
-      border-radius: 8px;
-      font-size: 16px;
-      margin: 0 auto;
-      display: block;
-      border: none;
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
+      width: 100%;
+    }
+  }
+
+  /* Ultra-small (very old phones < 320px) */
+  @media (max-width: 320px) {
+    .login {
+      width: 100%;
+      border-radius: 0;
+      padding: 12px;
     }
 
-    button:hover {
-      background-color: #0056b3;
+    h1 {
+      font-size: 20px;
     }
 
-    /* Tablet */
-    @media (max-width: 768px) {
-      .login {
-        width: 90%;
-        height: auto;
-      }
-      .form input[type="text"],
-      .form input[type="password"],
-      .form input[type="email"] {
-        width: 220px;
-      }
+    .form input[type="text"],
+    .form input[type="password"],
+    .form input[type="email"] {
+      width: 100%;
     }
-
-    /* Responsive for 790px to 890px */
-    @media (min-width: 790px) and (max-width: 890px) {
-      .login {
-        width: 80%;
-        height: auto;
-        padding: 18px;
-      }
-      .form input[type="text"],
-      .form input[type="password"],
-      .form input[type="email"] {
-        width: 180px;
-      }
-    }
-@media (min-width: 891px) and (max-width: 1024px) {
-      .login {
-        width: 70%;
-        height: auto;
-        padding: 18px;
-      }
-      .form input[type="text"],
-      .form input[type="password"],
-      .form input[type="email"] {
-        width: 220px;
-      }
-    }
-    /* Redmi & small mobiles (393px and below) */
-    @media (max-width: 393px) {
-      .login {
-        width: 99vw;
-        min-width: 0;
-        height: auto;
-        padding: 8px;
-        border-radius: 10px;
-      }
-      .one, .two {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-      }
-      .one label, .two label {
-        margin-bottom: 6px;
-        min-width: auto;
-        font-size: 15px;
-      }
-      .form input[type="text"],
-      .form input[type="password"],
-      .form input[type="email"] {
-        width: 100%;
-        font-size: 15px;
-        padding: 4px 6px;
-      }
-      button {
-        width: 100%;
-        font-size: 15px;
-      }
-      h1 {
-        font-size: 22px;
-      }
-    }
-
-    /* Ultra-small (very old phones < 320px) */
-    @media (max-width: 320px) {
-      .login {
-        width: 100vw;
-        border-radius: 0;
-        padding: 6px;
-      }
-      h1 {
-        font-size: 18px;
-      }
-      .form input[type="text"],
-      .form input[type="password"],
-      .form input[type="email"] {
-        width: 100%;
-        font-size: 14px;
-      }
-    }
-  </style>
+  }
+</style>
 {% endblock %}
 
 {% block content %}
-  <div class="bg-wrapper">
-    <div class="container" style="height: fit-content; display:flex; justify-content:center; align-items:center;">
-      <div class="login">
-        <h1 style="text-align: center;">Login</h1>
-        <div class="form">
-          <form method="post" action="{{ url_for('login') }}">
-            <div class="one">
-              <label for="username">Name : </label>
-              <input type="text" id="username" name="username"   required>
-            </div>
-            <div class="one">
-              <label for="email">Email : </label>
-              <input type="email" id="email" name="email"  required>
-            </div>
-            <div class="two">
-              <label for="password">Password : </label>
-              <input type="password" id="password" name="password"  required>
-            </div>
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="remember" name="remember">
-              <label class="form-check-label" for="remember">Remember me</label>
-            </div>
-            <button type="submit">Login</button>
-            <div class="sign-up" style="width: 100%; text-align: center; margin-top: 32px; font-weight: 600; color: #ccc;">
-              <small  >Don't have an account? <a style="color: #007bff;" href="/register">Register</a></small>
-            </div>
-          </form>
-        </div>
+<div class="bg-wrapper">
+  <div class="container" style="height: fit-content; display:flex; justify-content:center; align-items:center;">
+    <div class="login">
+      <h1 style="text-align: center;">Log In</h1>
+      <div class="form">
+        <form method="post" action="{{ url_for('login') }}">
+          <div class="one">
+            <label for="username">Name : </label>
+            <input type="text" id="username" name="username" required>
+          </div>
+          <div class="one">
+            <label for="email">Email : </label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="two">
+            <label for="password">Password : </label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="remember" name="remember">
+            <label class="form-check-label" for="remember">Remember me</label>
+          </div>
+          <button type="submit">Log In</button>
+
+        </form>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
